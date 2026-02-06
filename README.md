@@ -106,6 +106,22 @@ Each cell's volume trajectory (0 h → 12 h → 14 h) plotted as a thin line, wi
 
 ---
 
+#### Figure 05b — Locule Combined Trajectory (All Samples)
+
+All locule cells from all samples plotted on a single panel with individual traces and per-sample mean trajectories. A red division line marks the 12 h → 14 h transition.
+
+![Locule combined trajectory](visualization/05b_locule_combined_trajectory.png)
+
+---
+
+#### Figure 05c — Connective Tissue Combined Trajectory (All Samples)
+
+All connective tissue cells from all samples plotted on a single panel with individual traces and per-sample mean trajectories. A red division line marks the 12 h → 14 h transition.
+
+![CT combined trajectory](visualization/05c_connective_tissue_combined_trajectory.png)
+
+---
+
 #### Figure 06 — Percentage Volume Growth (0 h → 14 h)
 
 Box + strip plots of total percentage growth from 0 h to 14 h. Left panel: grouped by sample and tissue. Right panel: pooled by tissue type.
@@ -130,11 +146,11 @@ Heatmap of mean percentage volume growth for two intervals: 0 h → 12 h (pre-di
 
 ---
 
-#### Figure 09 — Paired Dot Plot (0 h vs. 14 h)
+#### Figure 09 — Cell Volume Trajectory by Sample (0 h → 12 h → 14 h)
 
-Each cell is shown as a pair of connected dots at 0 h and 14 h, colored by tissue type. Visualizes the direction and magnitude of volume change for every individual cell.
+Each cell's volume trajectory across all three timepoints (0 h, 12 h, 14 h) with individual traces colored by tissue type. Bold lines show the mean trajectory for Locule and Connective tissue within each sample. A red division line marks the division event.
 
-![Paired dotplot](visualization/09_paired_dotplot_0h_vs_14h.png)
+![Paired dotplot](visualization/09_paired_dotplot_0h_12h_14h.png)
 
 ---
 
@@ -184,16 +200,18 @@ All cells from all samples plotted on a single panel with individual traces, per
 single_cell_division_volume_visualization/
 ├── data/
 │   └── single cell division_volume.xlsx   # Raw data (arrangement tab)
-├── visualization/                         # Generated figures (14 PNGs, 300 DPI)
+├── visualization/                         # Generated figures (16 PNGs, 300 DPI)
 │   ├── 01_locule_across_samples.png
 │   ├── 02_connective_tissue_across_samples.png
 │   ├── 03_locule_vs_connective_within_sample.png
 │   ├── 04_overall_locule_vs_connective_tissue.png
 │   ├── 05_individual_cell_trajectories.png
+│   ├── 05b_locule_combined_trajectory.png
+│   ├── 05c_connective_tissue_combined_trajectory.png
 │   ├── 06_percent_growth_0h_to_14h.png
 │   ├── 07_mean_volume_bars_with_sem.png
 │   ├── 08_growth_heatmap.png
-│   ├── 09_paired_dotplot_0h_vs_14h.png
+│   ├── 09_paired_dotplot_0h_12h_14h.png
 │   ├── 10_violin_locule_vs_connective_tissue.png
 │   ├── 11_volume_before_vs_after_division_scatter.png
 │   ├── 12_volume_change_at_division.png
@@ -309,6 +327,22 @@ python generate_visualizations.py
 
 ---
 
+#### 图 05b — Locule 综合轨迹（所有样本）
+
+将所有样本的 locule 细胞绘制在同一面板上，包含个体轨迹和各样本均值轨迹。红色分裂线标记 12 h → 14 h 的过渡。
+
+![Locule 综合轨迹](visualization/05b_locule_combined_trajectory.png)
+
+---
+
+#### 图 05c — 结缔组织综合轨迹（所有样本）
+
+将所有样本的结缔组织细胞绘制在同一面板上，包含个体轨迹和各样本均值轨迹。红色分裂线标记 12 h → 14 h 的过渡。
+
+![结缔组织综合轨迹](visualization/05c_connective_tissue_combined_trajectory.png)
+
+---
+
 #### 图 06 — 百分比体积增长（0 h → 14 h）
 
 箱线图 + 散点图展示 0 h 到 14 h 的总百分比增长。左面板：按样本和组织分组；右面板：按组织类型合并。
@@ -333,11 +367,11 @@ python generate_visualizations.py
 
 ---
 
-#### 图 09 — 配对点图（0 h vs. 14 h）
+#### 图 09 — 各样本细胞体积轨迹（0 h → 12 h → 14 h）
 
-每个细胞以连线的点对形式展示其在 0 h 和 14 h 的体积，按组织类型着色。直观展示每个细胞体积变化的方向和幅度。
+每个细胞在三个时间点（0 h、12 h、14 h）的体积轨迹，按组织类型着色。粗线展示各样本内 Locule 和结缔组织的均值轨迹。红色分裂线标记分裂事件。
 
-![配对点图](visualization/09_paired_dotplot_0h_vs_14h.png)
+![配对点图](visualization/09_paired_dotplot_0h_12h_14h.png)
 
 ---
 
@@ -387,16 +421,18 @@ python generate_visualizations.py
 single_cell_division_volume_visualization/
 ├── data/
 │   └── single cell division_volume.xlsx   # 原始数据（arrangement 工作表）
-├── visualization/                         # 生成的图表（14 张 PNG，300 DPI）
+├── visualization/                         # 生成的图表（16 张 PNG，300 DPI）
 │   ├── 01_locule_across_samples.png
 │   ├── 02_connective_tissue_across_samples.png
 │   ├── 03_locule_vs_connective_within_sample.png
 │   ├── 04_overall_locule_vs_connective_tissue.png
 │   ├── 05_individual_cell_trajectories.png
+│   ├── 05b_locule_combined_trajectory.png
+│   ├── 05c_connective_tissue_combined_trajectory.png
 │   ├── 06_percent_growth_0h_to_14h.png
 │   ├── 07_mean_volume_bars_with_sem.png
 │   ├── 08_growth_heatmap.png
-│   ├── 09_paired_dotplot_0h_vs_14h.png
+│   ├── 09_paired_dotplot_0h_12h_14h.png
 │   ├── 10_violin_locule_vs_connective_tissue.png
 │   ├── 11_volume_before_vs_after_division_scatter.png
 │   ├── 12_volume_change_at_division.png
