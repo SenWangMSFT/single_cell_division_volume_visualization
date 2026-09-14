@@ -390,45 +390,62 @@ def fig5_growth_trajectories():
 # FIGURE 5b: Combined Locule trajectory (all samples, one panel)
 # ============================================================
 
-def fig5b_locule_combined_trajectory():
+def _fig5_combined_trajectory(tissue, name):
+    """Draw tissue trajectories on shared axes with per-sample mean +/- SEM."""
     fig, ax = plt.subplots(figsize=(6, 5))
-    fig.suptitle('Locule Cell Volume Trajectory Through Division\n(All Samples)', fontweight='bold', y=1.04)
+    timepoints = [0, 12, 14]
+    volume_columns = ['Vol_0h', 'Vol_12h', 'Vol_14h']
+    shared_data = df[df['Tissue'].isin(['Locule', 'Connective tissue'])]
+    grouped = shared_data.groupby(['Sample', 'Tissue'])[volume_columns]
+    peak_volume = max(
+        shared_data[volume_columns].max().max(),
+        (grouped.mean() + grouped.sem()).max().max(),
+    )
+    y_ticks = ticker.MaxNLocator(nbins=6, steps=[1, 2, 2.5, 5, 10]).tick_values(
+        0, peak_volume * 1.05,
+    )
+    sub_all = shared_data[shared_data['Tissue'] == tissue]
 
-    stages = ['0 h\n(Before growth)', '12 h\n(Before division)', '14 h\n(After division)']
-    x_pos = [0, 1, 2]
-
-    sub_all = df[df['Tissue'] == 'Locule']
-
-    # Individual traces
     for _, row in sub_all.iterrows():
         color = SAMPLE_COLORS[row['Sample']]
-        vols = [row['Vol_0h'], row['Vol_12h'], row['Vol_14h']]
-        ax.plot(x_pos, vols, '-o', color=color, alpha=0.25, linewidth=0.8, markersize=3.5)
+        ax.plot(timepoints, row[volume_columns], '-o', color=color,
+                alpha=0.25, linewidth=0.8, markersize=3.5, clip_on=False)
 
-    # Mean traces per sample
     for sample in SAMPLE_ORDER:
         sub = sub_all[sub_all['Sample'] == sample]
-        if len(sub) == 0:
+        if sub.empty:
             continue
-        means = [sub['Vol_0h'].mean(), sub['Vol_12h'].mean(), sub['Vol_14h'].mean()]
-        ax.plot(x_pos, means, '-s', color=SAMPLE_COLORS[sample],
-                linewidth=2.5, markersize=10, label=f'{sample_map_short[sample]} (n={len(sub)})',
-                markeredgecolor='white', markeredgewidth=1, zorder=5)
+        means = sub[volume_columns].mean().to_numpy()
+        sems = sub[volume_columns].sem().to_numpy()
+        ax.errorbar(
+            timepoints, means, yerr=sems, fmt='-s', color=SAMPLE_COLORS[sample],
+            linewidth=2, markersize=6, label=sample_map_short[sample],
+            markeredgecolor='white', markeredgewidth=0.8,
+            elinewidth=1.2, capsize=3, capthick=1.2, clip_on=False, zorder=5,
+        )
 
-    # Division line
-    ax.axvline(x=1.5, color='#C0392B', linestyle=':', alpha=0.8, linewidth=1.8)
-    ylim = ax.get_ylim()
-    ax.text(1.55, ylim[1] - (ylim[1] - ylim[0]) * 0.03, 'DIVISION', color='#C0392B',
-            fontsize=9, fontweight='bold', va='top')
-
-    ax.set_xticks(x_pos)
-    ax.set_xticklabels(stages)
+    ax.axvline(x=13, color='#C0392B', linestyle=':', alpha=0.7, linewidth=1)
+    ax.set_xticks(timepoints)
+    ax.set_xticklabels(['0 h', '12 h', '14 h'])
+    ax.set_xlim(0, 14)
+    ax.set_yticks(y_ticks)
+    ax.set_ylim(0, y_ticks[-1])
+    ax.ticklabel_format(axis='y', style='plain', useOffset=False)
+    ax.set_xlabel('')
     ax.set_ylabel('Volume (μm³)')
-    ax.set_xlim(-0.3, 2.4)
-    ax.legend(frameon=True, framealpha=0.9, edgecolor='gray', fontsize=9, loc='upper left')
+    ax.tick_params(axis='both', direction='out', length=4, width=0.8, labelsize=9)
+    ax.legend(frameon=False, fontsize=9, loc='upper left')
 
-    fig.tight_layout()
-    save_fig(fig, '05b_locule_combined_trajectory')
+    fig.subplots_adjust(left=0.16, right=0.96, bottom=0.12, top=0.96)
+    with plt.rc_context({'savefig.dpi': 600, 'savefig.bbox': None, 'pdf.fonttype': 42}):
+        pdf_path = f'visualization/{name}.pdf'
+        fig.savefig(pdf_path)
+        print(f"  Saved: {pdf_path}")
+        save_fig(fig, name)
+
+
+def fig5b_locule_combined_trajectory():
+    _fig5_combined_trajectory('Locule', '05b_locule_combined_trajectory')
 
 
 # ============================================================
@@ -436,44 +453,7 @@ def fig5b_locule_combined_trajectory():
 # ============================================================
 
 def fig5c_ct_combined_trajectory():
-    fig, ax = plt.subplots(figsize=(6, 5))
-    fig.suptitle('Connective Tissue Cell Volume Trajectory Through Division\n(All Samples)', fontweight='bold', y=1.04)
-
-    stages = ['0 h\n(Before growth)', '12 h\n(Before division)', '14 h\n(After division)']
-    x_pos = [0, 1, 2]
-
-    sub_all = df[df['Tissue'] == 'Connective tissue']
-
-    # Individual traces
-    for _, row in sub_all.iterrows():
-        color = SAMPLE_COLORS[row['Sample']]
-        vols = [row['Vol_0h'], row['Vol_12h'], row['Vol_14h']]
-        ax.plot(x_pos, vols, '-o', color=color, alpha=0.25, linewidth=0.8, markersize=3.5)
-
-    # Mean traces per sample
-    for sample in SAMPLE_ORDER:
-        sub = sub_all[sub_all['Sample'] == sample]
-        if len(sub) == 0:
-            continue
-        means = [sub['Vol_0h'].mean(), sub['Vol_12h'].mean(), sub['Vol_14h'].mean()]
-        ax.plot(x_pos, means, '-s', color=SAMPLE_COLORS[sample],
-                linewidth=2.5, markersize=10, label=f'{sample_map_short[sample]} (n={len(sub)})',
-                markeredgecolor='white', markeredgewidth=1, zorder=5)
-
-    # Division line
-    ax.axvline(x=1.5, color='#C0392B', linestyle=':', alpha=0.8, linewidth=1.8)
-    ylim = ax.get_ylim()
-    ax.text(1.55, ylim[1] - (ylim[1] - ylim[0]) * 0.03, 'DIVISION', color='#C0392B',
-            fontsize=9, fontweight='bold', va='top')
-
-    ax.set_xticks(x_pos)
-    ax.set_xticklabels(stages)
-    ax.set_ylabel('Volume (μm³)')
-    ax.set_xlim(-0.3, 2.4)
-    ax.legend(frameon=True, framealpha=0.9, edgecolor='gray', fontsize=9, loc='upper left')
-
-    fig.tight_layout()
-    save_fig(fig, '05c_connective_tissue_combined_trajectory')
+    _fig5_combined_trajectory('Connective tissue', '05c_connective_tissue_combined_trajectory')
 
 
 # ============================================================
@@ -999,21 +979,22 @@ def fig14_combined_trajectory():
 # RUN ALL FIGURES
 # ============================================================
 
-print("\nGenerating visualizations...")
-fig1_locule_across_samples()
-fig2_ct_across_samples()
-fig3_tissue_within_sample()
-fig4_overall_locule_vs_ct()
-fig5_growth_trajectories()
-fig5b_locule_combined_trajectory()
-fig5c_ct_combined_trajectory()
-fig6_percent_growth()
-fig7_mean_volume_bars()
-fig8_growth_heatmap()
-fig9_paired_dotplot()
-fig10_violin_overall()
-fig11_before_vs_after_division_scatter()
-fig12_division_volume_change()
-fig13_growth_phases()
-fig14_combined_trajectory()
-print("\nDone! All 16 visualizations saved to visualization/")
+if __name__ == '__main__':
+    print("\nGenerating visualizations...")
+    fig1_locule_across_samples()
+    fig2_ct_across_samples()
+    fig3_tissue_within_sample()
+    fig4_overall_locule_vs_ct()
+    fig5_growth_trajectories()
+    fig5b_locule_combined_trajectory()
+    fig5c_ct_combined_trajectory()
+    fig6_percent_growth()
+    fig7_mean_volume_bars()
+    fig8_growth_heatmap()
+    fig9_paired_dotplot()
+    fig10_violin_overall()
+    fig11_before_vs_after_division_scatter()
+    fig12_division_volume_change()
+    fig13_growth_phases()
+    fig14_combined_trajectory()
+    print("\nDone! All 16 visualizations saved to visualization/")

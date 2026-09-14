@@ -8,7 +8,7 @@
 
 ### Overview
 
-This project provides a Python-based analysis and visualization pipeline for studying **cell volume changes before and after cell division** across different tissue types (Locule and Connective tissue) and developmental stages. It parses single-cell tracking data from an Excel spreadsheet, computes growth metrics, and generates **14 publication-quality figures** (300 DPI PNG) covering cross-sample comparisons, tissue-type comparisons, growth trajectories, and division-event analysis.
+This project provides a Python-based analysis and visualization pipeline for studying **cell volume changes before and after cell division** across different tissue types (Locule and Connective tissue) and developmental stages. It parses single-cell tracking data from an Excel spreadsheet, computes growth metrics, and generates **16 figures** covering cross-sample comparisons, tissue-type comparisons, growth trajectories, and division-event analysis. Figures 5B and 5C are exported as 600 DPI PNG and vector PDF; the other figures are 300 DPI PNG.
 
 ### Data
 
@@ -58,7 +58,13 @@ python generate_visualizations.py
 
 **Output:**
 - Console: data summary (cell counts per sample and tissue type)
-- `visualization/` directory: 14 PNG figures at 300 DPI
+- `visualization/` directory: 16 PNG figures (5B/5C at 600 DPI; others at 300 DPI), plus vector PDFs for 5B/5C
+
+To regenerate only Figures 5B and 5C without changing other figures:
+
+```bash
+python -c "from generate_visualizations import fig5b_locule_combined_trajectory, fig5c_ct_combined_trajectory; fig5b_locule_combined_trajectory(); fig5c_ct_combined_trajectory()"
+```
 
 ### Output Visualizations
 
@@ -108,17 +114,23 @@ Each cell's volume trajectory (0 h → 12 h → 14 h) plotted as a thin line, wi
 
 #### Figure 05b — Locule Combined Trajectory (All Samples)
 
-All locule cells from all samples plotted on a single panel with individual traces and per-sample mean trajectories. A red division line marks the 12 h → 14 h transition.
+All locule cells from all samples plotted on a single panel. Faint lines show individual cells; bold square-marker lines show each sample's mean, with **± SEM error bars at every timepoint** (standard error of the mean across cells within that sample and tissue). The red dotted line at 13 h marks the 12 h to 14 h division interval, not an additional measurement timepoint.
+
+Figures 5B and 5C use identical dimensions, fonts, line styles and axes. The linear X axis runs from 0 to 14 h, with only 0 h, 12 h and 14 h ticks; the 0 h points lie on the Y axis. The shared Y scale includes all individual measurements and mean + SEM values, with an explicit upper tick. For the supplied data it is **0 to 600 μm³ in steps of 100**. There are no in-figure titles, extra X-axis descriptions or sample-count suffixes in the legend. Each panel is exported at 6 × 5 inches as a **600 DPI PNG (3600 × 3000 pixels)** and a **vector PDF with embedded TrueType fonts**.
 
 ![Locule combined trajectory](visualization/05b_locule_combined_trajectory.png)
+
+[Vector PDF](visualization/05b_locule_combined_trajectory.pdf)
 
 ---
 
 #### Figure 05c — Connective Tissue Combined Trajectory (All Samples)
 
-All connective tissue cells from all samples plotted on a single panel with individual traces and per-sample mean trajectories. A red division line marks the 12 h → 14 h transition.
+All connective tissue cells from all samples plotted with individual traces and per-sample **mean ± SEM** at 0 h, 12 h and 14 h. This panel uses the same shared Y scale, 0 to 14 h X range, title-free layout and export settings as Figure 5B, allowing direct comparison between tissues. The red dotted line at 13 h marks the division interval.
 
 ![CT combined trajectory](visualization/05c_connective_tissue_combined_trajectory.png)
+
+[Vector PDF](visualization/05c_connective_tissue_combined_trajectory.pdf)
 
 ---
 
@@ -200,7 +212,7 @@ All cells from all samples plotted on a single panel with individual traces, per
 single_cell_division_volume_visualization/
 ├── data/
 │   └── single cell division_volume.xlsx   # Raw data (arrangement tab)
-├── visualization/                         # Generated figures (16 PNGs, 300 DPI)
+├── visualization/                         # 16 PNGs (5B/5C: 600 DPI; others: 300 DPI) + 2 PDFs
 │   ├── 01_locule_across_samples.png
 │   ├── 02_connective_tissue_across_samples.png
 │   ├── 03_locule_vs_connective_within_sample.png
@@ -229,7 +241,7 @@ single_cell_division_volume_visualization/
 
 ### 概述
 
-本项目提供了一套基于 Python 的分析与可视化流程，用于研究不同组织类型（Locule / 胚珠室 和 Connective tissue / 结缔组织）及不同发育阶段下的**细胞分裂前后体积变化**。脚本从 Excel 表格中解析单细胞追踪数据，计算生长指标，并生成 **14 张适合学术发表的高质量图表**（300 DPI PNG）。
+本项目提供了一套基于 Python 的分析与可视化流程，用于研究不同组织类型（Locule / 胚珠室 和 Connective tissue / 结缔组织）及不同发育阶段下的**细胞分裂前后体积变化**。脚本从 Excel 表格中解析单细胞追踪数据，计算生长指标，并生成 **16 张图表**。图 5B、5C 输出为 600 DPI PNG 和矢量 PDF，其余图表为 300 DPI PNG。
 
 ### 数据说明
 
@@ -279,7 +291,13 @@ python generate_visualizations.py
 
 **输出：**
 - 控制台：数据概要（各样本和组织类型的细胞计数）
-- `visualization/` 目录：14 张 PNG 图表（300 DPI）
+- `visualization/` 目录：16 张 PNG（5B、5C 为 600 DPI，其余为 300 DPI），以及 5B、5C 的矢量 PDF
+
+仅重新生成图 5B、5C，不改动其他图表：
+
+```bash
+python -c "from generate_visualizations import fig5b_locule_combined_trajectory, fig5c_ct_combined_trajectory; fig5b_locule_combined_trajectory(); fig5c_ct_combined_trajectory()"
+```
 
 ### 输出可视化图表
 
@@ -329,17 +347,23 @@ python generate_visualizations.py
 
 #### 图 05b — Locule 综合轨迹（所有样本）
 
-将所有样本的 locule 细胞绘制在同一面板上，包含个体轨迹和各样本均值轨迹。红色分裂线标记 12 h → 14 h 的过渡。
+将所有样本的 locule 细胞绘制在同一面板上。浅色细线表示单个细胞轨迹，带方形标记的粗线表示各样本均值，**每个时间点均添加 ± SEM 误差线**（同一样本、同一组织内细胞体积的均值标准误）。13 h 处的红色点线标记 12 h 到 14 h 的分裂区间，并非额外测量时间点。
+
+图 5B、5C 的尺寸、字体、线条样式和坐标轴保持一致。X 轴采用真实时间比例，范围为 0 到 14 h，仅保留 0 h、12 h、14 h 三个刻度，0 h 数据点位于 Y 轴上。共同的 Y 轴范围覆盖所有个体数据及均值 + SEM，并明确标出顶部最大刻度；当前数据对应 **0 到 600 μm³，刻度间隔为 100**。图内不添加标题、X 轴额外说明或图例中的样本量后缀。两图均以 6 × 5 英寸导出为 **600 DPI PNG（3600 × 3000 像素）**和**嵌入 TrueType 字体的矢量 PDF**。
 
 ![Locule 综合轨迹](visualization/05b_locule_combined_trajectory.png)
+
+[矢量 PDF](visualization/05b_locule_combined_trajectory.pdf)
 
 ---
 
 #### 图 05c — 结缔组织综合轨迹（所有样本）
 
-将所有样本的结缔组织细胞绘制在同一面板上，包含个体轨迹和各样本均值轨迹。红色分裂线标记 12 h → 14 h 的过渡。
+将所有样本的结缔组织细胞绘制在同一面板上，包含个体轨迹及各样本在 0 h、12 h、14 h 的**均值 ± SEM**。与图 5B 使用相同的公共 Y 轴刻度、0 到 14 h 的 X 轴范围、无标题版式及导出设置，便于直接比较两种组织。13 h 处的红色点线标记分裂区间。
 
 ![结缔组织综合轨迹](visualization/05c_connective_tissue_combined_trajectory.png)
+
+[矢量 PDF](visualization/05c_connective_tissue_combined_trajectory.pdf)
 
 ---
 
@@ -421,7 +445,7 @@ python generate_visualizations.py
 single_cell_division_volume_visualization/
 ├── data/
 │   └── single cell division_volume.xlsx   # 原始数据（arrangement 工作表）
-├── visualization/                         # 生成的图表（16 张 PNG，300 DPI）
+├── visualization/                         # 16 张 PNG（5B/5C: 600 DPI；其余: 300 DPI）+ 2 张 PDF
 │   ├── 01_locule_across_samples.png
 │   ├── 02_connective_tissue_across_samples.png
 │   ├── 03_locule_vs_connective_within_sample.png
